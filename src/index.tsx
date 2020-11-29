@@ -8,14 +8,21 @@ import * as serviceWorker from './serviceWorker';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import axios from 'axios';
 
+axios.interceptors.request.use(request => {
+    const token = localStorage.getItem('authorization_token');
+    if (token) {
+        request.headers.Authorization = token;
+    }
+    return request;
+});
+
 axios.interceptors.response.use(
   response => {
     return response;
   },
-  function(error) {
-    if (error.response.status === 400) {
-      alert(error.response.data?.data);
-    }
+  error => {
+    const data = error.response.data?.data
+    alert(data || error.message || 'Request error');
     return Promise.reject(error.response);
   }
 );
