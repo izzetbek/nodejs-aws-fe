@@ -35,7 +35,6 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
       const response = await axios({
         method: 'GET',
         url,
-        withCredentials: true,
         params: {
           name: encodeURIComponent(file.name)
         }
