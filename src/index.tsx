@@ -11,19 +11,17 @@ import axios from 'axios';
 axios.interceptors.request.use(request => {
     const token = localStorage.getItem('authorization_token');
     if (token) {
-        request.headers.Authorization = token;
+        request.headers.Authorization = `Basic ${token}`;
     }
     return request;
 });
 
 axios.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => {
-    const data = error.response.data?.data
-    alert(data || error.message || 'Request error');
-    return Promise.reject(error.response);
+  response => response,
+    ({ response }) => {
+    const errorData = response.data;
+    alert(`${response.status}: ${errorData ? errorData.data || errorData.message : 'Request error'}`);
+    return Promise.reject(response);
   }
 );
 
